@@ -1,0 +1,6 @@
+@debug println("\n",H)
+@debug println("\n",eigH)
+@debug println("\n Eigen vectors are", eigH.vectors)
+@debug println("\n ρ is ", ρ)
+@debug println("\n M2 now is ",eigH.vectors' * M2 * eigH.vectors)
+@debug println("\n final matrix is ", ρ * eigH.vectors' * M2 * eigH.vectors)
