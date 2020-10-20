@@ -1,7 +1,7 @@
 using Plots
 import LinearAlgebra.dot
 
-points = 5000;
+points = 2000;
 t = 1;
 kpoints = [];
 num_pts = points^2;
@@ -13,8 +13,8 @@ for kx in range(-2π, 2π, length = points)
     end
 end
 
-ax = [1, 0]; ay = [1 / 2, sqrt(3) / 2]
-E(kpoints) = 2 * cos(dot(kpoints, (ax - ay))) + 2 * cos(dot(kpoints, ax)) + 2 * cos(dot(kpoints ,ay))
+#ax = [1, 0]; ay = [1 / 2, sqrt(3) / 2]
+E(k) = 2 * cos(k[1] - k[2]) + 2 * cos(k[1]) + 2 * cos(k[2])
 
 Energy = []
 x = 1
@@ -47,3 +47,5 @@ plot(
     ylabel = "Density",
     label = "N(E)",
 )
+
+println(sum(range(Emin, Emax, length = bin_num).*hist))
