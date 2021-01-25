@@ -1,4 +1,4 @@
-include("Ising_MC.jl")
+include("Ising_MC_Wolff.jl")
 using Plots
 using BenchmarkTools
 using JLD
