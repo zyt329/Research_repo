@@ -86,6 +86,30 @@ function flip_index(conf::spins)
 end
 
 """
+Function to decide whether to form a bond.
+
+Input:
+conf::spins : current state of the lattice
+x::Tuple : A Tuple of index of spin that's inside the Wolff's cluster(flipped spin in the Wolff's algorithm)
+y::Tuple : A Tuple of index of spin that represents the spin to be flipped
+
+output:
+true for a bond, false for no bond
+"""
+function bond(conf::spins, x, y)
+    T = conf.T
+    J = conf.J
+    p = 1 - exp(min(0, - J / T * conf.spin[x[1], x[2]] * 2 * conf.spin[y[1], y[2]]))
+    r = rand()
+    if r < p
+        return true
+    else
+        return false
+    end
+
+end
+
+"""
 Function to flip a spin
 
 Parameter:
@@ -101,6 +125,49 @@ function flip(conf::spins, index::Tuple)
     conf.spin[index[1], index[2]] = -1 * conf.spin[index[1], index[2]]
     return conf
 end
+
+"""
+function to construct the Wolff cluster and flip all of the spins in the cluster.
+
+Input:
+conf::spins : configuration of the system.
+
+
+Output:
+
+
+"""
+function Wolff_flip(conf::spins)
+    """
+    Search function to be performed recursively to complete a depth-first search of the entire lattice for the Wolff Cluster. Meanwhile flip the spins that's been reached.
+
+    Input :
+    conf::spins : configuration of the current state.
+    current_index::Tuple : index of the current position.
+
+    """
+    discovered = []
+    function search_flip(conf::spins, current_index::Tuple)
+        N = conf.dimension
+        conf = flip(conf, current_index)
+        push!(discovered, current_index)
+        neighbours = (
+            (mod1(current_index[1] + 1, N), current_index[2]),
+            (current_index[1], mod1(current_index[2] + 1, N)),
+            (mod1(current_index[1] - 1, N), current_index[2]),
+            (current_index[1], mod1(current_index[2] - 1, N)),
+        )
+        for neighb in neighbours
+            if (neighb ∉ discovered) && bond(conf, current_index, neighb)
+                search_flip(conf, neighb)
+            end
+        end
+    end
+    search_flip(conf, flip_index(conf))
+    #println(discovered)
+    return conf
+end
+
 
 """
 Calculating the energy of the current state
@@ -243,10 +310,7 @@ struct macrostate
         M2 = []
         M4 = []
         for i = 1:conf.steps
-            index = flip_index(conf)
-            if evol_cond(conf, index)
-                flip(conf, index)
-            end
+            Wolff_flip(conf)
             i < cutoff + 1 && continue
 
             push!(energy_site, conf.energy / conf.dimension^2)
