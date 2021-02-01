@@ -6,7 +6,7 @@ println("get started")
 
 Temp = (4.0, 2.8, 2.3, 1.5)
 sweep = 10^6
-Result = driver(12)
+@time Result = driver(12)
 
 function error_bunching(Result, bin_size)
     errors = []
@@ -66,7 +66,7 @@ function bunching_plot()
 
 end
 
-bunching_plot()
+#bunching_plot()
 
 
 

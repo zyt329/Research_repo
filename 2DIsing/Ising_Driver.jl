@@ -15,7 +15,7 @@ function driver(dimension)
     mac_states = []
     for T in Temp
         #mic_state = spins(T, -1, Int(floor(10^6*(dimension/8)^2)), dimension)
-        mic_state = spins(T, -1, Int(floor(10^6)), dimension)
+        mic_state = spins(T, -1, Int(floor(10^7)), dimension)
         mac_state = macrostate(mic_state, 10000)
         averages = avgs(mac_state)
         push!(mac_states, mac_state)

@@ -5,14 +5,14 @@ Represent a state.
 
 fields:  T, J, steps, dimension, spin
 """
-mutable struct spins
-    T::Any
-    J::Any
-    steps::Int64
-    dimension::Int64
-    spin::Array{Int64,2}
-    energy::Any
-    polar::Any
+mutable struct spins{A<:Float64,B<:Int64,C<:Array{Int64,2}}
+    T::A
+    J::A
+    steps::B
+    dimension::B
+    spin::C
+    energy::A
+    polar::A
     function spins(
         T,
         J,
@@ -39,7 +39,7 @@ mutable struct spins
             end
         end
         polar = sum(spin)
-        new(T, J, steps, dimension, spin, E0, polar)
+        new{Float64,Int64,Array{Int64,2}}(T, J, steps, dimension, spin, E0, polar)
     end
 end
 
@@ -99,7 +99,8 @@ function flip(conf::spins, index::Tuple)
     conf.energy += Energy_Diff(conf, index)
     conf.polar += -2 * conf.spin[index[1], index[2]]
     conf.spin[index[1], index[2]] = -1 * conf.spin[index[1], index[2]]
-    return conf
+    #return conf
+    nothing
 end
 
 """
@@ -221,13 +222,13 @@ energy_site::Float64 : Energy per site for the system at a certain temperature.
 polar_site::Float64 : Polarization per site for the system at a certain temperature.
 
 """
-struct macrostate
-    energy_site::Array
-    E2_site::Array
-    polar_site::Array
-    abs_polar::Array
-    M2::Array
-    M4::Array
+struct macrostate{T<:Array{Float64,1}}
+    energy_site::T
+    E2_site::T
+    polar_site::T
+    abs_polar::T
+    M2::T
+    M4::T
     """
     One method of the constructor's for the macrostate type.
 
@@ -236,12 +237,12 @@ struct macrostate
     cutoff::Int64 : Determines to how many steps would the system arrive at equilibrium(We would only calculate quantities after the cutoff step)
     """
     function macrostate(conf::spins, cutoff::Int64)
-        energy_site = []
-        E2_site = []
-        polar_site = []
-        abs_polar = []
-        M2 = []
-        M4 = []
+        energy_site = Float64[]
+        E2_site = Float64[]
+        polar_site = Float64[]
+        abs_polar = Float64[]
+        M2 = Float64[]
+        M4 = Float64[]
         for i = 1:conf.steps
             index = flip_index(conf)
             if evol_cond(conf, index)
@@ -257,7 +258,7 @@ struct macrostate
             push!(M4, conf.polar^4)
         end
 
-        new(energy_site, E2_site, polar_site, abs_polar, M2, M4)
+        new{Array{Float64,1}}(energy_site, E2_site, polar_site, abs_polar, M2, M4)
     end
 end
 
