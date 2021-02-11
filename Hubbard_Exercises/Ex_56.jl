@@ -2,9 +2,9 @@ using LinearAlgebra
 using Plots
 
 """Dispersion relation for up spins"""
-E_up(n_up, k, U; t = 1) = -2 * t * cos(k) + U * n_up
+E_up(n_down, k, U; t = 1) = -2 * t * cos(k) + U * n_down
 """Dispersion relation for down spins"""
-E_down(n_down, k, U; t = 1) = -2 * t * cos(k) + U * n_down
+E_down(n_up, k, U; t = 1) = -2 * t * cos(k) + U * n_up
 
 """finding the minimum energy amoung different magnetizations."""
 function meanfield(ρ, U; N::Int = 10^3, t = 1, E_up = E_up, E_down = E_down)

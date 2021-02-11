@@ -6,7 +6,6 @@ t = 1;
 kpoints = [];
 num_pts = points^2;
 
-
 for kx in range(-2π, 2π, length = points)
     for ky in range(-2π, 2π, length = points)
         push!(kpoints, [kx, ky])
@@ -48,4 +47,4 @@ plot(
     label = "N(E)",
 )
 
-println(sum(range(Emin, Emax, length = bin_num).*hist))
+println("Total energy is ",sum(range(Emin, Emax, length = bin_num).*hist))
