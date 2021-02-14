@@ -243,10 +243,15 @@ struct macrostate{T<:Array{Float64,1}}
         abs_polar = Float64[]
         M2 = Float64[]
         M4 = Float64[]
+        N = conf.dimension
         for i = 1:conf.steps
-            index = flip_index(conf)
-            if evol_cond(conf, index)
-                flip(conf, index)
+            for m = 1:N
+                for n = 1:N
+                    index = (m,n)
+                    if evol_cond(conf, index)
+                        flip(conf, index)
+                    end
+                end
             end
             i < cutoff + 1 && continue
 

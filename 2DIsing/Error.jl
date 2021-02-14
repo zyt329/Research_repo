@@ -4,7 +4,7 @@ using Plots
 
 println("get started")
 
-Temp = (4.0, 2.8, 2.3, 1.5)
+Temp = (2.1, 2.2, 2.3, 2.4)
 sweep = 10^6
 @time Result = driver(12)
 
@@ -33,7 +33,7 @@ function bunching_plot()
         32
         64
         128
-        256
+        #=256
         512
         1024
         2048
@@ -41,7 +41,7 @@ function bunching_plot()
         8192
         16384
         32768
-        65536
+        65536=#
     ]
     for bin_size in bin_sizes
         push!(errors, error_bunching(Result, bin_size))
@@ -66,7 +66,7 @@ function bunching_plot()
 
 end
 
-#bunching_plot()
+bunching_plot()
 
 
 

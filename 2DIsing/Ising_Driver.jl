@@ -6,16 +6,16 @@ using Dates
 
 function driver(dimension)
     #Temp = vcat(range(0.1, 5, length = 400),range(5.01,100, length = 100))
-    Temp = (4.0, 2.8, 2.3, 1.5)
-    E_site = []
-    S_site = []
-    B = []
-    χ = []
-    C = []
-    mac_states = []
+    Temp = (2.1, 2.2, 2.3, 2.4)
+    E_site = Float64[]
+    S_site = Float64[]
+    B = Float64[]
+    χ = Float64[]
+    C = Float64[]
+    mac_states = macrostate{Array{Float64,1}}[]
     for T in Temp
         #mic_state = spins(T, -1, Int(floor(10^6*(dimension/8)^2)), dimension)
-        mic_state = spins(T, -1, Int(floor(10^7)), dimension)
+        mic_state = spins(T, -1, Int(floor(10^5)), dimension)
         mac_state = macrostate(mic_state, 10000)
         averages = avgs(mac_state)
         push!(mac_states, mac_state)
